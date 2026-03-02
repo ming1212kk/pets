@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: pet-social-mvp
+
+server:
+  port: 8080
