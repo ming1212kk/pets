@@ -1,0 +1,61 @@
+<view class="shell">
+  <view class="panel">
+    <view class="panel-title">发布动态</view>
+    <view class="subtle">支持公开广场和圈子动态。视频仍然走异步审核。</view>
+
+    <view class="field" wx:if="{{hasPets}}">
+      <text class="label">宠物</text>
+      <picker mode="selector" range="{{pets}}" range-key="name" value="{{petIndex}}" bindchange="changePet">
+        <view class="picker">{{pets[petIndex].name}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <text class="label">可见范围</text>
+      <view class="segmented">
+        <view class="segment-item {{visibility === 'PUBLIC' ? 'active' : ''}}" data-value="PUBLIC" bindtap="changeVisibility">公开</view>
+        <view class="segment-item {{visibility === 'CIRCLE' ? 'active' : ''}}" data-value="CIRCLE" bindtap="changeVisibility">圈子</view>
+      </view>
+    </view>
+
+    <view class="field" wx:if="{{visibility === 'CIRCLE'}}">
+      <text class="label">投放圈子</text>
+      <view wx:if="{{circles.length}}" class="checkbox-list">
+        <checkbox-group bindchange="changeCircleSelection">
+          <label wx:for="{{circles}}" wx:key="id" class="checkbox-card">
+            <view class="checkbox-line">
+              <view>
+                <view>{{item.name}}</view>
+                <view class="subtle">{{item.memberCount}} 位成员</view>
+              </view>
+              <checkbox value="{{item.id}}" checked="{{item.selected}}" color="#2d6a4f" />
+            </view>
+          </label>
+        </checkbox-group>
+      </view>
+      <view wx:else class="subtle">你还没有加入圈子，先去“圈子”页创建或加入。</view>
+    </view>
+
+    <view class="field">
+      <text class="label">内容</text>
+      <textarea class="textarea" value="{{content}}" data-field="content" bindinput="updateField" placeholder="分享今天的宠物瞬间" />
+    </view>
+
+    <view class="field">
+      <text class="label">话题</text>
+      <input class="input" value="{{topic}}" data-field="topic" bindinput="updateField" placeholder="遛狗、洗澡、干饭" />
+    </view>
+
+    <view class="field">
+      <text class="label">图片地址</text>
+      <textarea class="textarea" value="{{imageUrlsText}}" data-field="imageUrlsText" bindinput="updateField" placeholder="多个地址可用逗号、空格或换行分隔" />
+    </view>
+
+    <view class="field">
+      <text class="label">视频地址</text>
+      <input class="input" value="{{videoUrl}}" data-field="videoUrl" bindinput="updateField" placeholder="可选，仅支持 1 条" />
+    </view>
+
+    <button class="btn" bindtap="submitPost">立即发布</button>
+  </view>
+</view>

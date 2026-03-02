@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/login/index",
+    "pages/square/index",
+    "pages/circles/index",
+    "pages/publish/index",
+    "pages/pets/index",
+    "pages/post-detail/index",
+    "pages/circle-feed/index",
+    "pages/circle-join/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "宠物社交",
+    "navigationBarBackgroundColor": "#14342b",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f4f7f2",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#6b7280",
+    "selectedColor": "#14342b",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/square/index",
+        "text": "广场"
+      },
+      {
+        "pagePath": "pages/circles/index",
+        "text": "圈子"
+      },
+      {
+        "pagePath": "pages/publish/index",
+        "text": "发布"
+      },
+      {
+        "pagePath": "pages/pets/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

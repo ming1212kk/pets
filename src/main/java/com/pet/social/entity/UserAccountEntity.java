@@ -35,6 +35,9 @@ public class UserAccountEntity {
     @Column(name = "wechat_key", length = 128)
     private String wechatKey;
 
+    @Column(name = "avatar_url", length = 512)
+    private String avatarUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)
     private UserRole role;
@@ -75,6 +78,14 @@ public class UserAccountEntity {
 
     public void setWechatKey(String wechatKey) {
         this.wechatKey = wechatKey;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public UserRole getRole() {

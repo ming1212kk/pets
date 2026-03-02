@@ -1,0 +1,75 @@
+<view class="shell" wx:if="{{post}}">
+  <view class="panel">
+    <view class="panel-title">{{post.authorNickname}} <text wx:if="{{post.petName}}">· {{post.petName}}</text></view>
+    <view class="chip">{{post.visibility === 'CIRCLE' ? '圈子动态' : '公开动态'}}</view>
+    <view wx:if="{{post.topic}}" class="chip">#{{post.topic}}</view>
+    <view class="card-copy">{{post.content}}</view>
+    <view wx:if="{{post.imageUrls.length}}">
+      <view wx:for="{{post.imageUrls}}" wx:key="*this" class="chip">{{item}}</view>
+    </view>
+    <view wx:if="{{post.visibleCircleIds.length}}">
+      <view wx:for="{{post.visibleCircleIds}}" wx:key="*this" class="chip">圈子 {{item}}</view>
+    </view>
+    <view wx:if="{{post.videoUrl}}" class="chip">视频：{{post.videoUrl}}</view>
+    <view class="meta">{{post.reviewStatus}} · {{post.likeCount}} 赞 · {{post.commentCount}} 评论</view>
+    <button class="btn" bindtap="toggleLike">{{post.likedByMe ? "取消点赞" : "点赞"}}</button>
+  </view>
+
+  <view class="panel">
+    <view class="panel-title">评论互动</view>
+    <view class="section-hint">支持楼中楼回复和 @ 用户。</view>
+
+    <view wx:if="{{replyContext}}" class="reply-context">
+      <view>正在回复：{{replyContext.replyToNickname}}</view>
+      <button class="ghost-button" bindtap="clearReplyContext">取消回复</button>
+    </view>
+
+    <view wx:if="{{mentionUsers.length}}" class="reply-context">
+      <view class="subtle">本次将 @ 以下用户</view>
+      <view class="inline-actions">
+        <button wx:for="{{mentionUsers}}" wx:key="userId" class="ghost-button" data-userid="{{item.userId}}" bindtap="removeMention">
+          @{{item.nickname}}
+        </button>
+      </view>
+    </view>
+
+    <textarea class="textarea" value="{{commentContent}}" data-field="commentContent" bindinput="updateField" placeholder="写下你的评论" />
+    <button class="btn" bindtap="submitComment">发送评论</button>
+  </view>
+
+  <view class="panel">
+    <view class="panel-title">评论列表</view>
+    <view wx:if="{{!commentThreads.length}}" class="subtle">还没有评论，抢先互动吧。</view>
+
+    <view wx:for="{{commentThreads}}" wx:key="id" class="card">
+      <view class="card-title">{{item.authorNickname}}</view>
+      <view class="card-copy">{{item.content}}</view>
+      <view wx:if="{{item.mentionNicknames.length}}">
+        <view wx:for="{{item.mentionNicknames}}" wx:key="*this" class="chip">@{{item}}</view>
+      </view>
+      <view class="meta">{{item.createdAt}}</view>
+      <view class="inline-actions">
+        <button class="ghost-button" data-id="{{item.id}}" data-parent-id="{{item.parentCommentId}}" data-author-id="{{item.authorId}}" data-author-nickname="{{item.authorNickname}}" bindtap="setReplyContext">回复</button>
+        <button class="ghost-button" data-userid="{{item.authorId}}" data-nickname="{{item.authorNickname}}" bindtap="addMention">@TA</button>
+        <button wx:if="{{item.authorId === user.userId}}" class="btn btn-secondary" data-id="{{item.id}}" bindtap="deleteComment">删除</button>
+      </view>
+
+      <view wx:if="{{item.children.length}}" class="nested-list">
+        <view wx:for="{{item.children}}" wx:key="id" class="reply-card">
+          <view class="card-title">{{item.authorNickname}}</view>
+          <view wx:if="{{item.replyToNickname}}" class="subtle">回复 {{item.replyToNickname}}</view>
+          <view class="card-copy">{{item.content}}</view>
+          <view wx:if="{{item.mentionNicknames.length}}">
+            <view wx:for="{{item.mentionNicknames}}" wx:key="*this" class="chip">@{{item}}</view>
+          </view>
+          <view class="meta">{{item.createdAt}}</view>
+          <view class="inline-actions">
+            <button class="ghost-button" data-id="{{item.id}}" data-parent-id="{{item.parentCommentId}}" data-author-id="{{item.authorId}}" data-author-nickname="{{item.authorNickname}}" bindtap="setReplyContext">回复</button>
+            <button class="ghost-button" data-userid="{{item.authorId}}" data-nickname="{{item.authorNickname}}" bindtap="addMention">@TA</button>
+            <button wx:if="{{item.authorId === user.userId}}" class="btn btn-secondary" data-id="{{item.id}}" bindtap="deleteComment">删除</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

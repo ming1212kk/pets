@@ -1,0 +1,22 @@
+<view class="shell">
+  <view class="panel">
+    <view class="panel-title">加入圈子</view>
+    <view class="subtle">把邀请码粘贴到这里即可加入。</view>
+    <view class="field">
+      <text class="label">邀请码</text>
+      <input class="input" value="{{token}}" bindinput="updateField" placeholder="输入圈主生成的邀请码" />
+    </view>
+    <button class="btn" bindtap="submitJoin">加入圈子</button>
+  </view>
+
+  <view wx:if="{{joinResult}}" class="panel">
+    <view class="panel-title">加入成功</view>
+    <view class="card-title">{{joinResult.name}}</view>
+    <view wx:if="{{joinResult.description}}" class="card-copy">{{joinResult.description}}</view>
+    <view class="subtle">圈主：{{joinResult.ownerNickname}} · {{joinResult.memberCount}} 位成员</view>
+    <view class="inline-actions">
+      <button class="ghost-button" bindtap="openCircleFeed">查看动态流</button>
+      <button class="ghost-button" bindtap="backToCircles">返回圈子页</button>
+    </view>
+  </view>
+</view>

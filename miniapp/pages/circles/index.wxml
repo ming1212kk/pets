@@ -1,0 +1,74 @@
+<view class="shell">
+  <view class="panel">
+    <view class="panel-title">{{editingCircleId ? "编辑圈子" : "创建圈子"}}</view>
+    <view class="field">
+      <text class="label">圈子名称</text>
+      <input class="input" value="{{formName}}" data-field="formName" bindinput="updateField" placeholder="例如：金毛出游搭子" />
+    </view>
+    <view class="field">
+      <text class="label">圈子描述</text>
+      <textarea class="textarea" value="{{formDescription}}" data-field="formDescription" bindinput="updateField" placeholder="补充圈子规则和主题" />
+    </view>
+    <view class="actions">
+      <button class="btn" bindtap="submitCircle">{{editingCircleId ? "保存修改" : "创建圈子"}}</button>
+      <button wx:if="{{editingCircleId}}" class="btn btn-secondary" bindtap="resetForm">取消编辑</button>
+    </view>
+    <view class="inline-actions">
+      <button class="ghost-button" bindtap="openJoinPage">去加入圈子</button>
+    </view>
+  </view>
+
+  <view wx:if="{{invitePreview}}" class="panel">
+    <view class="panel-title">最近一次邀请</view>
+    <view class="subtle">邀请码</view>
+    <view class="card-copy">{{invitePreview.token}}</view>
+    <view class="subtle">链接已复制到剪贴板，也可以进入加入页验收。</view>
+    <view class="inline-actions">
+      <button class="ghost-button" bindtap="openInviteJoinPage">打开加入页</button>
+    </view>
+  </view>
+
+  <view wx:if="{{!circles.length}}" class="panel">
+    <view class="subtle">你还没有加入任何圈子。可以先创建一个，或者使用邀请码加入。</view>
+  </view>
+
+  <view wx:for="{{circles}}" wx:key="id" class="card">
+    <view class="card-title">{{item.name}}</view>
+    <view class="subtle">圈主：{{item.ownerNickname}} · {{item.memberCount}} 位成员</view>
+    <view wx:if="{{item.description}}" class="card-copy">{{item.description}}</view>
+    <view class="inline-actions">
+      <button class="ghost-button" data-id="{{item.id}}" bindtap="openFeed">动态流</button>
+      <button class="ghost-button" data-id="{{item.id}}" bindtap="toggleMembers">
+        {{memberCircle && memberCircle.id === item.id ? "收起成员" : "成员列表"}}
+      </button>
+      <button wx:if="{{item.ownerId === user.userId}}" class="ghost-button" data-id="{{item.id}}" data-name="{{item.name}}" data-description="{{item.description}}" bindtap="startEdit">编辑</button>
+      <button wx:if="{{item.ownerId === user.userId}}" class="ghost-button" data-id="{{item.id}}" bindtap="createInvite">生成邀请</button>
+      <button class="btn btn-secondary" data-id="{{item.id}}" data-owner="{{item.ownerId === user.userId ? 'true' : 'false'}}" bindtap="leaveOrDissolve">
+        {{item.ownerId === user.userId ? "解散" : "退出"}}
+      </button>
+    </view>
+  </view>
+
+  <view wx:if="{{memberCircle}}" class="panel">
+    <view class="panel-title">{{memberCircle.name}} 成员</view>
+    <view class="stack">
+      <view wx:for="{{members}}" wx:key="membershipId" class="checkbox-card">
+        <view class="checkbox-line">
+          <view>
+            <view>{{item.nickname}}</view>
+            <view class="subtle">{{item.owner ? "圈主" : "成员"}} · {{item.joinedAt}}</view>
+          </view>
+          <button
+            wx:if="{{memberCircle.ownerId === user.userId && !item.owner}}"
+            class="ghost-button"
+            data-circle-id="{{memberCircle.id}}"
+            data-user-id="{{item.userId}}"
+            bindtap="removeMember"
+          >
+            移除
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

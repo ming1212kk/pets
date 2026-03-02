@@ -1,0 +1,39 @@
+<view class="shell">
+  <view class="panel">
+    <view class="panel-title">登录</view>
+    <view class="subtle">先确认后端地址，再选择手机号或微信登录。</view>
+    <view class="field">
+      <text class="label">后端地址</text>
+      <input class="input" value="{{baseUrl}}" data-field="baseUrl" bindinput="updateField" placeholder="http://127.0.0.1:8080" />
+    </view>
+    <button class="btn btn-secondary" bindtap="saveBaseUrl">保存地址</button>
+  </view>
+
+  <view class="panel">
+    <view class="panel-title">手机号登录</view>
+    <view class="field">
+      <text class="label">手机号</text>
+      <input class="input" value="{{phone}}" data-field="phone" bindinput="updateField" placeholder="13800000000" />
+    </view>
+    <button class="btn btn-secondary" bindtap="sendSmsCode">发送验证码</button>
+    <view wx:if="{{debugCode}}" class="field">
+      <text class="label">调试验证码</text>
+      <view class="chip">{{debugCode}}</view>
+    </view>
+    <view class="field">
+      <text class="label">短信验证码</text>
+      <input class="input" value="{{smsCode}}" data-field="smsCode" bindinput="updateField" placeholder="请输入 6 位验证码" />
+    </view>
+    <button class="btn" bindtap="phoneLogin">手机号登录</button>
+  </view>
+
+  <view class="panel">
+    <view class="panel-title">微信登录</view>
+    <view class="subtle">将尝试同步微信昵称和头像。</view>
+    <view wx:if="{{wechatAvatarUrl}}" class="field">
+      <image class="profile-avatar" src="{{wechatAvatarUrl}}" mode="aspectFill" />
+    </view>
+    <view wx:if="{{wechatNickname}}" class="chip">{{wechatNickname}}</view>
+    <button class="btn" bindtap="wechatLogin">微信登录</button>
+  </view>
+</view>

@@ -1,0 +1,85 @@
+<view class="shell" wx:if="{{profile}}">
+  <view class="panel">
+    <view class="panel-title">我的</view>
+    <view class="profile-head">
+      <image wx:if="{{profile.avatarUrl}}" class="avatar" src="{{profile.avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar-fallback">{{avatarInitial}}</view>
+      <view class="profile-main">
+        <view class="profile-name">{{profile.nickname}}</view>
+        <view class="subtle">用户 ID：{{profile.userId}}</view>
+        <view class="subtle">手机号：{{profile.phone || "未绑定"}}</view>
+      </view>
+    </view>
+
+    <view class="summary-grid">
+      <view class="summary-item">
+        <view class="subtle">账号类型</view>
+        <view>{{profile.role === 'ADMIN' ? "管理员" : "普通用户"}}</view>
+      </view>
+      <view class="summary-item">
+        <view class="subtle">微信状态</view>
+        <view>{{profile.wechatBound ? "已绑定" : "未绑定"}}</view>
+      </view>
+      <view class="summary-item">
+        <view class="subtle">宠物数量</view>
+        <view>{{pets.length}} 只</view>
+      </view>
+      <view class="summary-item">
+        <view class="subtle">默认宠物</view>
+        <view>{{defaultPetName || "未设置"}}</view>
+      </view>
+    </view>
+
+    <view class="inline-actions">
+      <button class="ghost-button" bindtap="logout">退出登录</button>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="panel-title">编辑资料</view>
+    <view class="field">
+      <text class="label">昵称</text>
+      <input class="input" value="{{profileNickname}}" data-field="profileNickname" bindinput="updateField" placeholder="请输入昵称" />
+    </view>
+    <view class="field">
+      <text class="label">头像地址</text>
+      <input class="input" value="{{profileAvatarUrl}}" data-field="profileAvatarUrl" bindinput="updateField" placeholder="可手动填写头像地址" />
+    </view>
+    <view class="actions">
+      <button class="btn" bindtap="saveProfile">保存资料</button>
+      <button class="btn btn-secondary" bindtap="syncWechatProfile">同步微信头像昵称</button>
+    </view>
+  </view>
+
+  <view class="panel">
+    <view class="panel-title">{{formId ? "编辑宠物" : "新增宠物"}}</view>
+    <view class="field">
+      <text class="label">昵称</text>
+      <input class="input" value="{{name}}" data-field="name" bindinput="updateField" placeholder="例如：Lucky" />
+    </view>
+    <view class="field">
+      <text class="label">品类</text>
+      <input class="input" value="{{type}}" data-field="type" bindinput="updateField" placeholder="例如：狗 / 猫" />
+    </view>
+    <view class="field">
+      <text class="label">年龄（月）</text>
+      <input class="input" type="number" value="{{ageMonths}}" data-field="ageMonths" bindinput="updateField" placeholder="18" />
+    </view>
+    <button class="btn" bindtap="submitPet">保存宠物</button>
+    <button class="btn btn-secondary" bindtap="resetForm" wx:if="{{formId}}">取消编辑</button>
+  </view>
+
+  <view class="panel">
+    <view class="panel-title">我的宠物</view>
+    <view wx:if="{{!pets.length}}" class="subtle">还没有宠物档案，先新增一只吧。</view>
+    <view wx:for="{{pets}}" wx:key="id" class="card">
+      <view class="card-title">{{item.name}} <text class="subtle">（{{item.type}}）</text></view>
+      <view class="meta">{{item.ageMonths}} 个月</view>
+      <view wx:if="{{item.defaultPet}}" class="chip">默认宠物</view>
+      <view class="actions">
+        <button class="btn btn-secondary" data-id="{{item.id}}" bindtap="editPet">编辑</button>
+        <button class="btn" data-id="{{item.id}}" bindtap="setDefaultPet">设为默认</button>
+      </view>
+    </view>
+  </view>
+</view>

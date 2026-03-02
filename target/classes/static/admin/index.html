@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pet Social Admin</title>
+  <link rel="stylesheet" href="/admin/styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Stage 1 Control Room</p>
+        <h1>Pet Social Admin</h1>
+        <p class="hero-copy">Log in as admin, review public posts, delete content, and ban or unban users.</p>
+      </div>
+      <div class="status-pill" id="status-pill">Disconnected</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Admin Login</h2>
+      </div>
+      <div class="form-grid">
+        <label>
+          <span>Base URL</span>
+          <input id="base-url" type="text" placeholder="http://localhost:8080">
+        </label>
+        <label>
+          <span>Username</span>
+          <input id="username" type="text" value="admin">
+        </label>
+        <label>
+          <span>Password</span>
+          <input id="password" type="password" value="admin123">
+        </label>
+      </div>
+      <div class="action-row">
+        <button id="login-btn">Login</button>
+        <button id="refresh-btn" class="ghost">Refresh Posts</button>
+      </div>
+      <p class="hint" id="login-message">Serve this page from the backend and keep the base URL aligned with the API port.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>User Ops</h2>
+      </div>
+      <div class="form-grid compact">
+        <label>
+          <span>User ID</span>
+          <input id="user-id" type="number" placeholder="1001">
+        </label>
+      </div>
+      <div class="action-row">
+        <button id="ban-btn" class="danger">Ban User</button>
+        <button id="unban-btn" class="ghost">Unban User</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Post Queue</h2>
+        <span id="post-count">0 posts</span>
+      </div>
+      <div id="post-list" class="post-list">
+        <div class="empty">Log in to load data.</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/admin/app.js"></script>
+</body>
+</html>

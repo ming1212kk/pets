@@ -7,15 +7,18 @@ public class UserAccount {
     private final String nickname;
     private final String phone;
     private final String wechatKey;
+    private final String avatarUrl;
     private final UserRole role;
     private UserStatus status;
     private final Instant createdAt;
 
-    public UserAccount(long id, String nickname, String phone, String wechatKey, UserRole role, UserStatus status, Instant createdAt) {
+    public UserAccount(long id, String nickname, String phone, String wechatKey, String avatarUrl,
+                       UserRole role, UserStatus status, Instant createdAt) {
         this.id = id;
         this.nickname = nickname;
         this.phone = phone;
         this.wechatKey = wechatKey;
+        this.avatarUrl = avatarUrl;
         this.role = role;
         this.status = status;
         this.createdAt = createdAt;
@@ -35,6 +38,10 @@ public class UserAccount {
 
     public String getWechatKey() {
         return wechatKey;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
     public UserRole getRole() {

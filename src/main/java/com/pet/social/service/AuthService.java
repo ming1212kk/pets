@@ -54,11 +54,11 @@ public class AuthService {
         return new AuthResult(user, jwtService.issueToken(user));
     }
 
-    public AuthResult loginByWechat(String code, String nickname) {
+    public AuthResult loginByWechat(String code, String nickname, String avatarUrl) {
         if (code == null || code.isBlank()) {
-            throw new IllegalArgumentException("微信登录 code 不能为空");
+            throw new IllegalArgumentException("微信登录凭证不能为空");
         }
-        UserAccount user = dataStore.getOrCreateWechatUser("wx:" + code.trim(), nickname);
+        UserAccount user = dataStore.getOrCreateWechatUser("wx:" + code.trim(), nickname, avatarUrl);
         assertActive(user);
         return new AuthResult(user, jwtService.issueToken(user));
     }
@@ -84,6 +84,10 @@ public class AuthService {
 
     private String cooldownKey(String phone) {
         return "auth:sms:cooldown:" + phone;
+    }
+
+    public String issueToken(UserAccount user) {
+        return jwtService.issueToken(user);
     }
 
     public record SmsCodeTicket(String code, Instant expiresAt, long cooldownSeconds) {

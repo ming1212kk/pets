@@ -33,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/login/wechat")
     public AuthResponse loginByWechat(@Valid @RequestBody WechatLoginRequest request) {
-        return toResponse(authService.loginByWechat(request.code(), request.nickname()));
+        return toResponse(authService.loginByWechat(request.code(), request.nickname(), request.avatarUrl()));
     }
 
     @PostMapping("/admin/login")
@@ -51,7 +51,10 @@ public class AuthController {
         return new AuthResponse(
             result.user().getId(),
             result.user().getNickname(),
+            result.user().getAvatarUrl(),
+            result.user().getPhone(),
             result.user().getRole().name(),
+            result.user().getWechatKey() != null && !result.user().getWechatKey().isBlank(),
             result.token()
         );
     }
@@ -62,7 +65,7 @@ public class AuthController {
     public record PhoneLoginRequest(@NotBlank String phone, @NotBlank String code) {
     }
 
-    public record WechatLoginRequest(@NotBlank String code, String nickname) {
+    public record WechatLoginRequest(@NotBlank String code, String nickname, String avatarUrl) {
     }
 
     public record AdminLoginRequest(@NotBlank String username, @NotBlank String password) {
@@ -71,7 +74,8 @@ public class AuthController {
     public record SmsCodeResponse(String debugCode, String expiresAt, long cooldownSeconds) {
     }
 
-    public record AuthResponse(long userId, String nickname, String role, String token) {
+    public record AuthResponse(long userId, String nickname, String avatarUrl, String phone, String role,
+                               boolean wechatBound, String token) {
     }
 
     public record ErrorResponse(String message) {

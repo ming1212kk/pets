@@ -1,0 +1,23 @@
+<view class="shell">
+  <view class="panel">
+    <view class="panel-title">{{circle ? circle.name : "圈子动态"}}</view>
+    <view wx:if="{{circle}}" class="subtle">{{circle.ownerNickname}} 创建 · {{circle.memberCount}} 位成员</view>
+    <view wx:if="{{circle && circle.description}}" class="card-copy">{{circle.description}}</view>
+    <button class="btn" bindtap="openPublish">去发布动态</button>
+  </view>
+
+  <view wx:if="{{!posts.length}}" class="panel">
+    <view class="subtle">这个圈子还没有通过审核的动态，你可以发布第一条。</view>
+  </view>
+
+  <view wx:for="{{posts}}" wx:key="id" class="card" data-id="{{item.id}}" bindtap="openDetail">
+    <view class="card-title">{{item.authorNickname}} <text wx:if="{{item.petName}}">· {{item.petName}}</text></view>
+    <view wx:if="{{item.topic}}" class="chip">#{{item.topic}}</view>
+    <view class="card-copy">{{item.content}}</view>
+    <view wx:if="{{item.imageUrls.length}}">
+      <view wx:for="{{item.imageUrls}}" wx:key="*this" class="chip">{{item}}</view>
+    </view>
+    <view wx:if="{{item.videoUrl}}" class="chip">视频：{{item.videoUrl}}</view>
+    <view class="meta">{{item.likeCount}} 赞 · {{item.commentCount}} 评论</view>
+  </view>
+</view>

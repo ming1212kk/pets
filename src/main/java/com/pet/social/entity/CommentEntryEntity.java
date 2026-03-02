@@ -27,6 +27,15 @@ public class CommentEntryEntity {
     @Column(name = "author_id", nullable = false)
     private Long authorId;
 
+    @Column(name = "parent_comment_id")
+    private Long parentCommentId;
+
+    @Column(name = "reply_to_user_id")
+    private Long replyToUserId;
+
+    @Column(name = "mention_user_ids_json")
+    private String mentionUserIdsJson;
+
     @Column(nullable = false, length = 1000)
     private String content;
 
@@ -57,6 +66,30 @@ public class CommentEntryEntity {
 
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
+    }
+
+    public Long getParentCommentId() {
+        return parentCommentId;
+    }
+
+    public void setParentCommentId(Long parentCommentId) {
+        this.parentCommentId = parentCommentId;
+    }
+
+    public Long getReplyToUserId() {
+        return replyToUserId;
+    }
+
+    public void setReplyToUserId(Long replyToUserId) {
+        this.replyToUserId = replyToUserId;
+    }
+
+    public String getMentionUserIdsJson() {
+        return mentionUserIdsJson;
+    }
+
+    public void setMentionUserIdsJson(String mentionUserIdsJson) {
+        this.mentionUserIdsJson = mentionUserIdsJson;
     }
 
     public String getContent() {

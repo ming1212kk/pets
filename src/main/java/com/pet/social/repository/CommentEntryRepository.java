@@ -9,4 +9,6 @@ public interface CommentEntryRepository extends JpaRepository<CommentEntryEntity
     List<CommentEntryEntity> findByPostIdAndDeletedFalseOrderByCreatedAtAsc(Long postId);
 
     long countByPostIdAndDeletedFalse(Long postId);
+
+    List<CommentEntryEntity> findByParentCommentIdAndDeletedFalseOrderByCreatedAtAsc(Long parentCommentId);
 }

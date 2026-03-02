@@ -1,0 +1,25 @@
+<view class="shell">
+  <view class="panel">
+    <view class="panel-title">宠物广场</view>
+    <view class="subtle">这里只展示公开帖子，不显示圈子内容。</view>
+    <view class="inline-actions">
+      <button class="ghost-button" bindtap="openPublish">去发布</button>
+      <button class="ghost-button" bindtap="openCircles">查看圈子</button>
+    </view>
+  </view>
+
+  <view wx:if="{{!posts.length}}" class="panel">
+    <view class="subtle">还没有公开帖子，先发布第一条吧。</view>
+  </view>
+
+  <view wx:for="{{posts}}" wx:key="id" class="card" data-id="{{item.id}}" bindtap="openDetail">
+    <view class="card-title">{{item.authorNickname}} <text wx:if="{{item.petName}}">· {{item.petName}}</text></view>
+    <view wx:if="{{item.topic}}" class="chip">#{{item.topic}}</view>
+    <view class="card-copy">{{item.content}}</view>
+    <view wx:if="{{item.imageUrls.length}}">
+      <view wx:for="{{item.imageUrls}}" wx:key="*this" class="chip">{{item}}</view>
+    </view>
+    <view wx:if="{{item.videoUrl}}" class="chip">视频：{{item.videoUrl}}</view>
+    <view class="meta">{{item.likeCount}} 赞 · {{item.commentCount}} 评论</view>
+  </view>
+</view>

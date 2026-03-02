@@ -13,6 +13,8 @@ public class PostEntry {
     private final List<String> imageUrls;
     private final String videoUrl;
     private final String topic;
+    private final PostVisibility visibility;
+    private final List<Long> visibleCircleIds;
     private ReviewStatus reviewStatus;
     private String reviewReason;
     private int likeCount;
@@ -21,7 +23,8 @@ public class PostEntry {
     private Instant updatedAt;
 
     public PostEntry(long id, long authorId, Long petId, String content, List<String> imageUrls, String videoUrl, String topic,
-                     ReviewStatus reviewStatus, String reviewReason, Instant createdAt, Instant updatedAt) {
+                     PostVisibility visibility, List<Long> visibleCircleIds, ReviewStatus reviewStatus, String reviewReason,
+                     Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.authorId = authorId;
         this.petId = petId;
@@ -29,6 +32,8 @@ public class PostEntry {
         this.imageUrls = new ArrayList<>(imageUrls);
         this.videoUrl = videoUrl;
         this.topic = topic;
+        this.visibility = visibility;
+        this.visibleCircleIds = new ArrayList<>(visibleCircleIds);
         this.reviewStatus = reviewStatus;
         this.reviewReason = reviewReason;
         this.createdAt = createdAt;
@@ -61,6 +66,14 @@ public class PostEntry {
 
     public String getTopic() {
         return topic;
+    }
+
+    public PostVisibility getVisibility() {
+        return visibility;
+    }
+
+    public List<Long> getVisibleCircleIds() {
+        return Collections.unmodifiableList(visibleCircleIds);
     }
 
     public ReviewStatus getReviewStatus() {

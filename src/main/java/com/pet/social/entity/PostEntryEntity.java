@@ -1,5 +1,6 @@
 package com.pet.social.entity;
 
+import com.pet.social.domain.PostVisibility;
 import com.pet.social.domain.ReviewStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,6 +47,14 @@ public class PostEntryEntity {
 
     @Column(length = 64)
     private String topic;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 16)
+    private PostVisibility visibility;
+
+    @Lob
+    @Column(name = "visible_circle_ids_json")
+    private String visibleCircleIdsJson;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "review_status", nullable = false, length = 32)
@@ -116,6 +125,22 @@ public class PostEntryEntity {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public PostVisibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(PostVisibility visibility) {
+        this.visibility = visibility;
+    }
+
+    public String getVisibleCircleIdsJson() {
+        return visibleCircleIdsJson;
+    }
+
+    public void setVisibleCircleIdsJson(String visibleCircleIdsJson) {
+        this.visibleCircleIdsJson = visibleCircleIdsJson;
     }
 
     public ReviewStatus getReviewStatus() {
