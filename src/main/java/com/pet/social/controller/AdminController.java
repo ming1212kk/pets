@@ -6,7 +6,7 @@ import com.pet.social.domain.UserAccount;
 import com.pet.social.domain.UserRole;
 import com.pet.social.domain.UserStatus;
 import com.pet.social.service.PostService;
-import com.pet.social.store.InMemoryDataStore;
+import com.pet.social.store.AppDataStore;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,10 +23,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/admin")
 public class AdminController {
-    private final InMemoryDataStore dataStore;
+    private final AppDataStore dataStore;
     private final PostService postService;
 
-    public AdminController(InMemoryDataStore dataStore, PostService postService) {
+    public AdminController(AppDataStore dataStore, PostService postService) {
         this.dataStore = dataStore;
         this.postService = postService;
     }

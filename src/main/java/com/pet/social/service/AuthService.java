@@ -2,14 +2,13 @@ package com.pet.social.service;
 
 import com.pet.social.domain.UserAccount;
 import com.pet.social.domain.UserStatus;
-import com.pet.social.store.InMemoryDataStore;
+import com.pet.social.store.AppDataStore;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AuthService {
@@ -18,34 +17,38 @@ public class AuthService {
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
 
-    private final InMemoryDataStore dataStore;
+    private final AppDataStore dataStore;
     private final JwtService jwtService;
+    private final StringRedisTemplate stringRedisTemplate;
     private final SecureRandom secureRandom = new SecureRandom();
-    private final Map<String, SmsCodeState> smsCodes = new ConcurrentHashMap<>();
 
-    public AuthService(InMemoryDataStore dataStore, JwtService jwtService) {
+    public AuthService(AppDataStore dataStore, JwtService jwtService, StringRedisTemplate stringRedisTemplate) {
         this.dataStore = dataStore;
         this.jwtService = jwtService;
+        this.stringRedisTemplate = stringRedisTemplate;
     }
 
     public SmsCodeTicket sendSmsCode(String phone) {
-        SmsCodeState existing = smsCodes.get(phone);
-        if (existing != null && Duration.between(existing.sentAt(), Instant.now()).compareTo(SMS_SEND_INTERVAL) < 0) {
-            long waitSeconds = SMS_SEND_INTERVAL.minus(Duration.between(existing.sentAt(), Instant.now())).getSeconds();
-            throw new IllegalArgumentException("验证码发送过于频繁，请在 " + waitSeconds + " 秒后重试");
+        String cooldownKey = cooldownKey(phone);
+        if (Boolean.TRUE.equals(stringRedisTemplate.hasKey(cooldownKey))) {
+            Long waitSeconds = stringRedisTemplate.getExpire(cooldownKey);
+            long remaining = waitSeconds == null || waitSeconds < 0 ? SMS_SEND_INTERVAL.getSeconds() : waitSeconds;
+            throw new IllegalArgumentException("验证码发送过于频繁，请在 " + remaining + " 秒后重试");
         }
 
         String code = String.format("%06d", secureRandom.nextInt(1_000_000));
         Instant expiresAt = Instant.now().plus(SMS_CODE_TTL);
-        smsCodes.put(phone, new SmsCodeState(code, Instant.now(), expiresAt));
+        stringRedisTemplate.opsForValue().set(codeKey(phone), code, SMS_CODE_TTL);
+        stringRedisTemplate.opsForValue().set(cooldownKey, "1", SMS_SEND_INTERVAL);
         return new SmsCodeTicket(code, expiresAt, SMS_SEND_INTERVAL.getSeconds());
     }
 
     public AuthResult loginByPhone(String phone, String code) {
-        SmsCodeState state = smsCodes.get(phone);
-        if (state == null || !state.code().equals(code) || Instant.now().isAfter(state.expiresAt())) {
+        String cachedCode = stringRedisTemplate.opsForValue().get(codeKey(phone));
+        if (cachedCode == null || !cachedCode.equals(code)) {
             throw new IllegalArgumentException("验证码无效或已过期");
         }
+        stringRedisTemplate.delete(codeKey(phone));
         UserAccount user = dataStore.getOrCreatePhoneUser(phone);
         assertActive(user);
         return new AuthResult(user, jwtService.issueToken(user));
@@ -75,7 +78,12 @@ public class AuthService {
         }
     }
 
-    private record SmsCodeState(String code, Instant sentAt, Instant expiresAt) {
+    private String codeKey(String phone) {
+        return "auth:sms:code:" + phone;
+    }
+
+    private String cooldownKey(String phone) {
+        return "auth:sms:cooldown:" + phone;
     }
 
     public record SmsCodeTicket(String code, Instant expiresAt, long cooldownSeconds) {

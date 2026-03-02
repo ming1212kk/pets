@@ -3,7 +3,7 @@ package com.pet.social.controller;
 import com.pet.social.config.AuthInterceptor;
 import com.pet.social.domain.PetProfile;
 import com.pet.social.domain.UserAccount;
-import com.pet.social.store.InMemoryDataStore;
+import com.pet.social.store.AppDataStore;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -24,9 +24,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/pets")
 public class PetController {
-    private final InMemoryDataStore dataStore;
+    private final AppDataStore dataStore;
 
-    public PetController(InMemoryDataStore dataStore) {
+    public PetController(AppDataStore dataStore) {
         this.dataStore = dataStore;
     }
 

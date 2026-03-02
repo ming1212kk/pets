@@ -7,7 +7,7 @@ import com.pet.social.domain.ReviewStatus;
 import com.pet.social.domain.UserAccount;
 import com.pet.social.domain.UserRole;
 import com.pet.social.domain.UserStatus;
-import com.pet.social.store.InMemoryDataStore;
+import com.pet.social.store.AppDataStore;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -15,10 +15,10 @@ import java.util.List;
 
 @Service
 public class PostService {
-    private final InMemoryDataStore dataStore;
+    private final AppDataStore dataStore;
     private final ContentSafetyService contentSafetyService;
 
-    public PostService(InMemoryDataStore dataStore, ContentSafetyService contentSafetyService) {
+    public PostService(AppDataStore dataStore, ContentSafetyService contentSafetyService) {
         this.dataStore = dataStore;
         this.contentSafetyService = contentSafetyService;
     }

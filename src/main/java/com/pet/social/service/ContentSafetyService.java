@@ -1,7 +1,7 @@
 package com.pet.social.service;
 
 import com.pet.social.domain.ReviewStatus;
-import com.pet.social.store.InMemoryDataStore;
+import com.pet.social.store.AppDataStore;
 import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit;
 public class ContentSafetyService {
     private static final Set<String> BLOCKED_KEYWORDS = Set.of("spam", "赌博", "色情", "violence", "违规");
 
-    private final InMemoryDataStore dataStore;
+    private final AppDataStore dataStore;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-    public ContentSafetyService(InMemoryDataStore dataStore) {
+    public ContentSafetyService(AppDataStore dataStore) {
         this.dataStore = dataStore;
     }
 

@@ -3,7 +3,7 @@ package com.pet.social.config;
 import com.pet.social.domain.UserAccount;
 import com.pet.social.domain.UserStatus;
 import com.pet.social.service.JwtService;
-import com.pet.social.store.InMemoryDataStore;
+import com.pet.social.store.AppDataStore;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpMethod;
@@ -15,9 +15,9 @@ public class AuthInterceptor implements HandlerInterceptor {
     public static final String CURRENT_USER = "currentUser";
 
     private final JwtService jwtService;
-    private final InMemoryDataStore dataStore;
+    private final AppDataStore dataStore;
 
-    public AuthInterceptor(JwtService jwtService, InMemoryDataStore dataStore) {
+    public AuthInterceptor(JwtService jwtService, AppDataStore dataStore) {
         this.jwtService = jwtService;
         this.dataStore = dataStore;
     }

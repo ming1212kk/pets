@@ -6,7 +6,7 @@ import com.pet.social.domain.PetProfile;
 import com.pet.social.domain.PostEntry;
 import com.pet.social.domain.UserAccount;
 import com.pet.social.service.PostService;
-import com.pet.social.store.InMemoryDataStore;
+import com.pet.social.store.AppDataStore;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -29,9 +29,9 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class PostController {
     private final PostService postService;
-    private final InMemoryDataStore dataStore;
+    private final AppDataStore dataStore;
 
-    public PostController(PostService postService, InMemoryDataStore dataStore) {
+    public PostController(PostService postService, AppDataStore dataStore) {
         this.postService = postService;
         this.dataStore = dataStore;
     }

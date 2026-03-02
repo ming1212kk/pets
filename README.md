@@ -1,11 +1,11 @@
 # Pet Social MVP - Stage 1
 
-This repository now contains a runnable Spring Boot 3 backend for phase 1 of the pet social mini program.
+This repository now contains a Spring Boot 3 backend for phase 1 of the pet social mini program, backed by MySQL and Redis.
 
 ## Covered in stage 1
 
 - WeChat login (mock code exchange)
-- Phone login with SMS verification code and send-frequency limiting
+- Phone login with SMS verification code and Redis-based send-frequency limiting
 - JWT-based authentication
 - Pet profile create/edit/default selection
 - Public post publishing with text, images, and one video URL
@@ -15,6 +15,29 @@ This repository now contains a runnable Spring Boot 3 backend for phase 1 of the
 - Like / unlike
 - First-level comments and comment deletion
 - Basic admin APIs for viewing posts, deleting posts, and banning users
+
+## Infrastructure
+
+Start local MySQL and Redis:
+
+```bash
+docker compose up -d
+```
+
+Default local connections:
+
+- MySQL: `jdbc:mysql://localhost:3306/pet_social`
+- Redis: `localhost:6379`
+
+Environment variables:
+
+- `MYSQL_URL`
+- `MYSQL_USERNAME`
+- `MYSQL_PASSWORD`
+- `REDIS_HOST`
+- `REDIS_PORT`
+- `REDIS_PASSWORD`
+- `REDIS_DATABASE`
 
 ## How to run
 
@@ -61,5 +84,6 @@ curl -X POST http://localhost:8080/api/v1/auth/admin/login \
 
 ## Notes
 
-- Data is stored in memory for fast local acceptance testing.
-- The current implementation mirrors the phase-1 product behavior, while leaving MySQL, Redis, object storage, and real WeChat/content-safety integrations for the next iteration.
+- Core business data is persisted in MySQL.
+- SMS verification codes and rate-limit cooldowns are stored in Redis.
+- Object storage, real WeChat login, and production content-safety integrations are still mocked at the business layer.
