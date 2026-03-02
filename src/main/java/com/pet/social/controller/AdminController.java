@@ -74,7 +74,9 @@ public class AdminController {
         UserAccount author = dataStore.getUser(post.getAuthorId());
         return new AdminPostResponse(
             post.getId(),
+            post.getAuthorId(),
             author == null ? "未知用户" : author.getNickname(),
+            author == null ? UserStatus.ACTIVE.name() : author.getStatus().name(),
             post.getContent(),
             post.getReviewStatus().name(),
             post.getReviewReason(),
@@ -91,8 +93,8 @@ public class AdminController {
         }
     }
 
-    public record AdminPostResponse(long id, String authorNickname, String content, String reviewStatus, String reviewReason,
-                                    int likeCount, int commentCount, String createdAt) {
+    public record AdminPostResponse(long id, long authorId, String authorNickname, String authorStatus, String content,
+                                    String reviewStatus, String reviewReason, int likeCount, int commentCount, String createdAt) {
     }
 
     public record ActionResponse(String message) {

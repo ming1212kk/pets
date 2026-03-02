@@ -94,6 +94,7 @@ public class PostController {
         PetProfile pet = post.getPetId() == null ? null : dataStore.findPet(post.getPetId()).orElse(null);
         return new PostSummaryResponse(
             post.getId(),
+            post.getAuthorId(),
             post.getContent(),
             post.getImageUrls(),
             post.getVideoUrl(),
@@ -117,6 +118,7 @@ public class PostController {
         Map<Long, UserAccount> userSnapshot = dataStore.snapshotUsers(authorIds);
         return new PostDetailResponse(
             post.getId(),
+            post.getAuthorId(),
             post.getContent(),
             post.getImageUrls(),
             post.getVideoUrl(),
@@ -133,6 +135,7 @@ public class PostController {
                 UserAccount commentAuthor = userSnapshot.get(comment.getAuthorId());
                 return new CommentResponse(
                     comment.getId(),
+                    comment.getAuthorId(),
                     comment.getContent(),
                     commentAuthor == null ? "未知用户" : commentAuthor.getNickname(),
                     comment.getCreatedAt().toString()
@@ -142,7 +145,7 @@ public class PostController {
     }
 
     private CommentResponse toComment(CommentEntry comment, UserAccount actor) {
-        return new CommentResponse(comment.getId(), comment.getContent(), actor.getNickname(), comment.getCreatedAt().toString());
+        return new CommentResponse(comment.getId(), actor.getId(), comment.getContent(), actor.getNickname(), comment.getCreatedAt().toString());
     }
 
     private UserAccount currentUser(HttpServletRequest request) {
@@ -155,18 +158,18 @@ public class PostController {
     public record CreateCommentRequest(@NotBlank String content) {
     }
 
-    public record PostSummaryResponse(long id, String content, List<String> imageUrls, String videoUrl, String topic,
+    public record PostSummaryResponse(long id, long authorId, String content, List<String> imageUrls, String videoUrl, String topic,
                                       String reviewStatus, String reviewReason, int likeCount, int commentCount,
                                       boolean likedByMe, String authorNickname, String petName, String createdAt) {
     }
 
-    public record PostDetailResponse(long id, String content, List<String> imageUrls, String videoUrl, String topic,
+    public record PostDetailResponse(long id, long authorId, String content, List<String> imageUrls, String videoUrl, String topic,
                                      String reviewStatus, String reviewReason, int likeCount, int commentCount,
                                      boolean likedByMe, String authorNickname, String petName, String createdAt,
                                      List<CommentResponse> comments) {
     }
 
-    public record CommentResponse(long id, String content, String authorNickname, String createdAt) {
+    public record CommentResponse(long id, long authorId, String content, String authorNickname, String createdAt) {
     }
 
     public record ActionResponse(String message) {

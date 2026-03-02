@@ -195,11 +195,11 @@ public class AppDataStore {
         like.setPostId(postId);
         like.setUserId(userId);
         try {
-            postLikeRepository.save(like);
+            postLikeRepository.saveAndFlush(like);
         } catch (DataIntegrityViolationException exception) {
             return false;
         }
-        refreshLikeCount(post);
+        post.setLikeCount(post.getLikeCount() + 1);
         return true;
     }
 
@@ -211,7 +211,8 @@ public class AppDataStore {
             return false;
         }
         postLikeRepository.delete(like.get());
-        refreshLikeCount(post);
+        postLikeRepository.flush();
+        post.setLikeCount(Math.max(0, post.getLikeCount() - 1));
         return true;
     }
 

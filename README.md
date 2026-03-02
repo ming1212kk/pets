@@ -87,3 +87,17 @@ curl -X POST http://localhost:8080/api/v1/auth/admin/login \
 - Core business data is persisted in MySQL.
 - SMS verification codes and rate-limit cooldowns are stored in Redis.
 - Object storage, real WeChat login, and production content-safety integrations are still mocked at the business layer.
+
+## Frontend deliverables
+
+- WeChat mini program source: `miniapp/`
+- WeChat DevTools config: `project.config.json`
+- Admin page: `http://localhost:8080/admin/index.html`
+
+If `8080` is occupied locally, use:
+
+```bash
+MYSQL_USERNAME=root MYSQL_PASSWORD=zgm585880 SERVER_PORT=8081 mvn spring-boot:run
+```
+
+Then open `http://localhost:8081/admin/index.html` and use the same base URL in the mini program login page.
